@@ -1,52 +1,65 @@
 // src/app/page.tsx
 'use client'
 
-import React from 'react';
-import { LoginButton, liskSepolia } from 'panna-sdk';
+import React, { useState } from 'react';
 import PetitionList from '@/components/PetitionList';
 import CreatePetitionForm from '@/components/CreatePetitionForm';
 import MembershipGate from '@/components/MembershipGate';
-import { useActiveAccount } from 'panna-sdk'; 
+import Sidebar from '@/components/Sidebar';
+import TopNavbar from '@/components/TopNavbar';
+// Mengimpor semua ikon yang digunakan di halaman ini, termasuk FileText
+import { Zap, Users, Shield, FileText, LucideIcon } from 'lucide-react'; 
+
+// 1. DEFINISI INTERFACE UNTUK STAT CARD (Koreksi Error 7031)
+interface StatCardProps {
+    title: string;
+    value: string;
+    icon: LucideIcon; // LucideIcon adalah tipe data untuk komponen ikon dari lucide-react
+}
+
+// Card Statistik Sederhana (Sekarang menggunakan tipe eksplisit)
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon }) => (
+    <div className="bg-white p-5 rounded-xl shadow-md border border-gray-200 flex items-center space-x-4">
+        <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
+            <Icon className="w-6 h-6" />
+        </div>
+        <div>
+            <p className="text-sm font-medium text-gray-500">{title}</p>
+            <p className="text-2xl font-bold text-gray-800">{value}</p>
+        </div>
+    </div>
+);
 
 export default function Home() {
-  const activeAccount = useActiveAccount();
-  const address = activeAccount?.address || 'Belum Terhubung';
-  const displayAddress = address !== 'Belum Terhubung' ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8"> 
+    <div className="min-h-screen bg-gray-50">
       
-      {/* Header (Top Navbar Style) */}
-      <header className="max-w-7xl mx-auto mb-10 p-4 bg-white shadow-md rounded-lg flex justify-between items-center">
-        <h1 className="text-3xl font-extrabold text-blue-700 tracking-tight">
-            SofcialFi Petition Hub 🗳️
-        </h1>
-        
-        {/* Wallet & Login Button */}
-        <div className="flex items-center space-x-3">
-            <span className="text-sm font-medium text-gray-600 hidden sm:block">
-                Status: {displayAddress}
-            </span>
-            
-            {/* WRAP LoginButton dalam DIV untuk styling, dan HAPUS className dari LoginButton */}
-            <div className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                <LoginButton 
-                    chain={liskSepolia} 
-                    // CLASSNAME DIHAPUS DARI SINI
-                    // Anda dapat menambahkan custom styling *ke dalam* LoginButton 
-                    // (sesuai docs Panna), tetapi tidak sebagai className prop.
-                />
-            </div>
-        </div>
-      </header>
+      {/* Sidebar (Sembunyi di mobile) */}
+      <Sidebar />
+      
+      {/* Navbar (Mengambang di atas konten) */}
+      <TopNavbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-      <main className="max-w-7xl mx-auto">
+      {/* Konten Utama */}
+      <main className="lg:ml-64 pt-24 p-6"> {/* Padding atas 16px untuk Navbar */}
         
-        {/* Layout Grid: 1/3 untuk Form, 2/3 untuk Daftar */}
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard Petisi</h1>
+
+        {/* Baris Statistik */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="stats">
+            {/* KOREKSI: Menggunakan FileText yang sudah diimpor */}
+            <StatCard title="Total Anggota (NFT)" value="1,245" icon={Users} />
+            <StatCard title="Petisi Aktif" value="45" icon={FileText} /> 
+            <StatCard title="Dana Terkunci (Boost)" value="890 CAMP" icon={Zap} />
+        </div>
+
+        {/* Konten Utama: Grid Petisi dan Formulir */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"> 
           
           {/* Kolom Kiri: Membership Gate & Form */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-6" id="create">
             <MembershipGate>
               <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
                 <h2 className="text-xl font-bold mb-4 text-gray-800">Buat Petisi Baru</h2>
