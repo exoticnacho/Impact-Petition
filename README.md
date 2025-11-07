@@ -40,7 +40,7 @@ Proyek ini memungkinkan pengguna untuk **membuat, melihat, dan menandatangani pe
 
 ```bash
 # 1️⃣ Kloning repositori
-git clone [URL_REPOSITORI_ANDA]
+git clone https://github.com/exoticnacho/Impact-Petition
 cd petition-platform-dapp
 
 # 2️⃣ Instal dependensi
@@ -49,7 +49,7 @@ npm install
 yarn install
 
 # 3️⃣ Buat file konfigurasi environment
-cat > .env.local << 'EOF'
+.env.local
 # ============================================
 # KREDENSIAL PANNA SDK (Wajib untuk Gasless!)
 # ============================================
@@ -62,7 +62,7 @@ NEXT_PUBLIC_PANNA_PARTNER_ID=YOUR_PARTNER_ID_DARI_PANNA
 NEXT_PUBLIC_PETITION_PLATFORM_ADDRESS=0x4Ec2EEc9D8071DBB9e4ba332e93d6624fF614D8b
 NEXT_PUBLIC_CAMPAIGN_TOKEN_ADDRESS=0x7D3e8350c2a87b9d61816975CFe0cd18CC4e7B30
 NEXT_PUBLIC_SOULBOUND_MEMBER_ADDRESS=0x9F090D06638f7d32915065d51BE2E737b8E6bDaB
-EOF
+
 
 # 4️⃣ Jalankan aplikasi
 npm run dev
@@ -85,4 +85,4 @@ Pastikan akun **MetaMask** Anda telah terhubung ke **Lisk Sepolia Testnet**, dan
 ## ⚙️ Cara Menjalankan Aplikasi
 
 ```bash
-npm run dev
+yarn dev
