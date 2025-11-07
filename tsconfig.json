@@ -18,9 +18,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".", // <-- Base URL harus di root project
     "paths": {
-      "@/*": ["./*"]
-    }
+      // Alias @/ akan menunjuk ke folder src/
+      "@/*": ["./src/*"] 
+    },
   },
   "include": [
     "next-env.d.ts",
