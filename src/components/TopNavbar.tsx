@@ -3,7 +3,9 @@
 
 import React from 'react';
 import { LoginButton, liskSepolia, useActiveAccount } from 'panna-sdk';
-import { Menu } from 'lucide-react';
+import { Menu, Bell } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'; 
 
 interface TopNavbarProps {
   onMenuClick: () => void;
@@ -11,36 +13,48 @@ interface TopNavbarProps {
 
 const TopNavbar: React.FC<TopNavbarProps> = ({ onMenuClick }) => {
   const activeAccount = useActiveAccount();
-  const address = activeAccount?.address || 'Belum Terhubung';
-  const displayAddress = address !== 'Belum Terhubung' ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  const address = activeAccount?.address || null;
+  const isConnected = !!address;
+  const displayAddress = isConnected ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Guest';
 
   return (
-    <nav className="fixed top-0 left-0 lg:left-64 right-0 h-16 bg-white shadow-md z-40 border-b border-gray-200">
+    <nav className="fixed top-0 left-0 lg:left-64 right-0 h-16 bg-white dark:bg-gray-900 shadow-md z-40 border-b border-gray-200 dark:border-gray-800">
       <div className="flex justify-between items-center h-full px-6">
         
         {/* Tombol Menu untuk Mobile */}
-        <button 
+        <Button 
           onClick={onMenuClick} 
-          className="lg:hidden p-2 rounded-md hover:bg-gray-100 transition"
-          aria-label="Toggle Menu"
+          className="lg:hidden"
+          variant="ghost"
+          size="icon"
         >
-          <Menu className="w-6 h-6 text-gray-700" />
-        </button>
+          <Menu className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        </Button>
 
-        {/* Judul Dashboard */}
-        <h2 className="text-xl font-semibold text-gray-800 hidden sm:block">
-            Petition Hub Dashboard
+        {/* Judul/Pesan Sambutan */}
+        <h2 className="text-lg font-medium text-gray-800 dark:text-gray-100 hidden sm:block">
+            Welcome back, <span className="text-indigo-600 dark:text-indigo-400 font-semibold">{isConnected ? 'Member' : 'Guest'}</span>!
         </h2>
 
-        {/* Wallet & Login Button */}
-        <div className="flex items-center space-x-3">
-            <span className="text-sm font-medium text-gray-600 hidden sm:block">
-                {displayAddress}
-            </span>
-            <div className="rounded-lg overflow-hidden shadow-sm transition">
-                <LoginButton 
-                    chain={liskSepolia} 
-                />
+        {/* User Actions & Wallet */}
+        <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="icon">
+                <Bell className="w-5 h-5 text-muted-foreground hover:text-indigo-500" />
+            </Button>
+            
+            <div className="flex items-center space-x-2">
+                <Avatar>
+                    <AvatarFallback className="bg-indigo-600 text-white font-bold text-sm">
+                        {isConnected ? displayAddress.slice(0, 2) : 'G'}
+                    </AvatarFallback>
+                </Avatar>
+
+                {/* Login Button Panna SDK - Ditempatkan di dalam wrapper shadcn/ui */}
+                <div className="rounded-lg overflow-hidden shadow-sm transition">
+                    <LoginButton 
+                        chain={liskSepolia} 
+                    />
+                </div>
             </div>
         </div>
       </div>

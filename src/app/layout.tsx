@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Petition Platform",
-  description: "A SofcialFi Petition DApp on Lisk Sepolia",
+  description: "A ImpactChain Petition DApp on Lisk Sepolia",
 };
 
 export default function RootLayout({
